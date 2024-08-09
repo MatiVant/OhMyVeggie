@@ -9,7 +9,7 @@ const csvFilePath = "C:\\Star POS Market\\export\\ARTICULOS.csv";
 const tsvFilePath = path.join("C:\\Star POS Market\\export", "ARTICULOS.tsv");
 
 const dbURL =
-  "mongodb+srv://matiastrovant:mhjjqrxCRldG7UAb@omvtest.72ckbwy.mongodb.net/";
+  "mongodb+srv://agustinmacazzaga:PZuJ288k4Kyn5vW5@ohmyveggie.4xaykot.mongodb.net/";
 const dbNAME = "ohmyveggie";
 
 const productSchema = new Schema(
@@ -76,22 +76,18 @@ const convertCsvToTsv = (csvFilePath, tsvFilePath, callback) => {
 
 const importToMongo = async () => {
   const escapedFilePath = tsvFilePath.replace(/\\/g, "\\\\");
+
   const client = new MongoClient(dbURL, {
     monitorCommands: true,
   });
+
   await client.connect();
   const db = client.db(dbNAME);
   const extProducts = db.collection("external-products");
   const deleteProd = await extProducts.deleteMany({});
 
   exec(
-    `mongoimport --uri "mongodb+srv://matiastrovant:mhjjqrxCRldG7UAb@omvtest.72ckbwy.mongodb.net/${dbNAME}?retryWrites=true&w=majority&appName=OMVtest" \
-     --collection external-products \
-     --type tsv \
-     --headerline \
-     --file "${escapedFilePath}" \
-     --upsert \
-     --upsertFields id`,
+    `mongoimport --uri "mongodb+srv://agustinmacazzaga:PZuJ288k4Kyn5vW5@ohmyveggie.4xaykot.mongodb.net/ohmyveggie" --collection external-products --type tsv --headerline --file "${escapedFilePath}" --upsert --upsertFields id`,
 
     async (error, stdout, stderr) => {
       if (error) {
